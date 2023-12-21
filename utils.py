@@ -40,8 +40,8 @@ def procesar_archivo(archivo):
       contenido = archivo.readlines()
       nombrearchivo = archivo.name
       cantlineas = len(contenido)
-      cantpalabras = sum(len(linea.rstrip('\n')) for linea in contenido)
-      cantcaracteres = sum(len(linea) for linea in contenido)
+      cantpalabras = sum(len(linea.split()) for linea in contenido)
+      cantcaracteres = sum(len(linea.rstrip('\n')) for linea in contenido)
       fecharegistro = datetime.now()
 
       datos = [(nombrearchivo, cantlineas, cantpalabras, cantcaracteres, fecharegistro)]
