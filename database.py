@@ -1,4 +1,6 @@
 import os
+import datetime
+from flask_restful import Resource
 import mysql.connector
 from mysql.connector import Error
 from dotenv import load_dotenv
@@ -30,3 +32,32 @@ def connect_db():
   except Error as e:
     print("Error al conectar a MySQL", e)
     return None
+
+class InformacionResource(Resource):
+  def get(self, page=1):
+    connection = connect_db()
+    if connection:
+      try:
+        cursor = connection.cursor()
+        query = f"SELECT * FROM informacion LIMIT 10 OFFSET {(page-1) * 10}"
+        cursor.execute(query)
+        records = cursor.fetchall()
+        cursor.close()
+        connection.close()
+
+        # Convertir objetos datetime a cadenas de texto
+        for i in range(len(records)):
+          record = list(records[i])
+          if isinstance(record[5], datetime.datetime):
+            record[5] = record[5].strftime('%Y-%m-%d %H:%M:%S')
+          records[i] = tuple(record)
+                
+        return records
+
+      except Error as e:
+        print("Error al consultar datos", e)
+        return None
+    
+    else:
+      print("Error al conectar a la base de datos")
+      return None

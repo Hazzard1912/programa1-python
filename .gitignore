@@ -6,3 +6,5 @@ data/mysql_data
 env/
 
 __pycache__/
+
+informacion.pdf
